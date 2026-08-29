@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+*.log
+out/
+qwen3b/
+ckpt/*-merged/
+data/*.csv
+data/*.parquet
+ckpt/orm_r1/
+ckpt/orm_r2/

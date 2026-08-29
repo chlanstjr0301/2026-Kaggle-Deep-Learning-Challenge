@@ -1,0 +1,29 @@
+아주 소중한 딥러닝 챌린지 2026 — 재현 환경 (규정 8.2)
+스냅샷: 2026-08-26 08:18:43 UTC  ·  vast.ai instance 48489593
+
+[하드웨어]
+name, memory.total [MiB], driver_version
+NVIDIA A100-SXM4-40GB, 40960 MiB, 580.159.03
+CPU  128 cores · AMD EPYC 7542 32-Core Processor
+RAM  2015 GB
+
+[시스템]
+OS      Ubuntu 24.04.4 LTS
+Kernel  6.17.0-1011-oracle
+Python  Python 3.12.13
+
+[베이스 모델 · Qwen/Qwen2.5-3B-Instruct]
+67347b23fb4165b652eb6611f5e1f2a06dfcddba8e909df1b2b0b1857bee06c2  qwen3b/model-00001-of-00002.safetensors
+a40d941d0e7e0b966ad8b62bb6d6b7c88cce1299197b599d9d0a4ce59aabfc1d  qwen3b/model-00002-of-00002.safetensors
+
+[핵심 라이브러리]
+torch          2.13.0+cu130
+vllm           0.27.1
+transformers   5.15.1
+peft           0.20.0
+trl            1.10.0
+datasets       5.0.1
+accelerate     1.14.0
+numpy          2.3.5
+pandas         3.0.5
+safetensors    0.8.0

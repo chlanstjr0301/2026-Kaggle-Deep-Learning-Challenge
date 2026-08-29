@@ -1,0 +1,41 @@
+# ── 절대 규칙 ────────────────────────────────────────────────
+# 고정 상수는 "드라이버"다. torch도 vllm도 변수다.
+#
+#   드라이버 CUDA >= 13.0 (= 드라이버 580+)
+#       -> torch 2.13.0 (cu130) + vllm 0.27.x.  PyPI 기본 조합이 그대로 맞음.
+#          pip 명령에 --index-url 을 붙이지 말 것. 붙이면 cu128을 끌어와서
+#          vllm wheel(cu13 빌드)과 어긋나 libcudart.so.13 에러가 난다.
+#
+#   드라이버 CUDA < 13.0 (= 드라이버 570 등)
+#       -> vllm PyPI wheel 자체가 못 뜬다. 버전 조합으로 해결 불가.
+#          호스트를 바꿔야 한다. bootstrap.sh step 0이 여기서 끊는다.
+#
+# 확인:  nvidia-smi 의 "CUDA Version"  vs  python -c "import torch;print(torch.version.cuda)"
+#        이 둘의 major 가 같아야 하고, vllm wheel 도 같은 major 여야 한다.
+# ─────────────────────────────────────────────────────────────
+
+# [main venv] 추론 전용 — 드라이버 CUDA 13 기준
+torch==2.13.0
+torchvision==0.28.0
+vllm==0.27.1
+
+# [train venv] 학습 전용 — $WS/venv-train 에 따로 설치
+#   vllm이 요구하는 transformers 5.x 에서 peft 가 BloomPreTrainedModel 임포트로 죽는다.
+#   두 스택은 동시에 실행되지 않으므로 분리 비용은 디스크 몇 GB뿐.
+# torch==2.13.0
+# transformers<5
+# trl / peft / accelerate / datasets / bitsandbytes
+
+# [알려진 충돌] torchaudio
+#   일부 이미지는 torch(cu130)와 torchaudio(cu128)를 같이 깔아 놓는다.
+#   transformers 가 audio_utils 를 거쳐 torchaudio 를 임포트하면서
+#   "PyTorch and TorchAudio were compiled with different CUDA versions" 로 죽고,
+#   그 결과 peft 임포트가 BloomPreTrainedModel 에서 실패한다.
+#   추론·학습 어디에도 torchaudio 를 쓰지 않으므로 제거하면 해결된다.
+#       pip uninstall -y torchaudio
+
+# [공통]
+pandas
+numpy
+huggingface_hub
+hf_transfer          # hub 1.x 부터 [hf_transfer] extra 가 사라짐. 별도 설치.
